@@ -91,6 +91,7 @@ vec3 lightingCalc(vec3 albedo) {
     float perceptualSmoothness = specularData.r;
     float metallic = 0.0;
     vec3 reflectance = vec3(specularData.g);
+    // vec3 reflectance = vec3(0);  matte surface
     if (specularData.g * 255 > 229) {
         metallic = 1.0;
         reflectance  = albedo;
@@ -117,7 +118,7 @@ vec3 lightingCalc(vec3 albedo) {
     
 
     //shadows
-    float shadow = step(fragshadowScreenSpace.z - 0.001, texture(shadowtex0, fragshadowScreenSpace.xy).rgb).r;
+    float shadow = step(fragshadowScreenSpace.z - 0.005, texture(shadowtex0, fragshadowScreenSpace.xy).r);
 
     //ambient calculation
     vec3 ambientDir = w_geoNormal;
