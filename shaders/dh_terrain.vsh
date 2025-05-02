@@ -6,7 +6,8 @@ out vec3 viewSpacePosition;
 out vec3 geoNormal;
 
 void main() {
-    geoNormal = gl_NormalMatrix * gl_Normal
+
+    geoNormal = gl_NormalMatrix * gl_Normal;
     blockColor = gl_Color;
     lightMapCoords = (gl_TextureMatrix[1] * gl_MultiTexCoord1).xy;
 
