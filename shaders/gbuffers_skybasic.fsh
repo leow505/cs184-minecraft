@@ -26,6 +26,7 @@ vec3 screenToView(vec3 screenPos) {
 
 /* DRAWBUFFERS:0 */
 layout(location = 0) out vec4 color;
+layout(location = 1) out vec4 outColor1; //colortex1 - specular
 
 void main() {
 	if (starData.a > 0.5) {
