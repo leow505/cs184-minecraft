@@ -20,10 +20,12 @@ uniform float near;
 uniform float far;
 uniform float dhNearPlane;
 uniform float dhFarPlane;
+uniform float fogDensity = 0.2;
 uniform vec3 fogColor;
 uniform vec3 shadowLightPosition;
 uniform vec3 cameraPosition;
 uniform int renderStage;
+uniform float frameTimeCounter;
 
 //vertexToFragment
 in vec4 blockColor;
@@ -65,7 +67,7 @@ void main() {
     
     vec3 skyLight = pow(texture(lightmap,vec2(1.0/32.0,lightMapCoords.y)).rgb,vec3(2.2));
 
-    vec3 outputColor = lightingCalc(albedo, tangent, w_geoNormal, w_geoNormal, skyLight, fragFeetPlayerSpace, fragWorldSpace);
+    vec3 outputColor = lightingCalc(albedo, tangent, w_geoNormal, w_geoNormal, skyLight, fragFeetPlayerSpace, fragWorldSpace, frameTimeCounter);
 
 
     //depth testing
@@ -78,10 +80,23 @@ void main() {
         discard;
     }
 
+
+    
+
     //dh blend
     float distanceFromCamera = distance(viewSpacePosition,vec3(0));
+    float viewDist = linearizeDepth(depth, near, far);
     float dhBlend = pow(smoothstep(far-.5*far,far,distanceFromCamera),.6);
-    transparency = mix(0.0,transparency,dhBlend);
+    // transparency = mix(0.0,transparency,dhBlend);
+    // outputColor = mix(outputColor, fogcolor, fogDensity);
+    // vec3 fogcolor = vec3(0.1, 0.1, 0.15);
+    // float fogFactor = 1.0 - exp(-pow(dhDepthLinear * fogDensity, 1.5));
+    // fogFactor = clamp(fogFactor, 0.0, 1.0);
+
+    float maxFogVal = 1500;
+    float minFogVal = 750;
+    float fogBlend = (distanceFromCamera - minFogVal) / (maxFogVal - minFogVal);
+    outputColor = mix(outputColor, pow(fogColor, vec3(2.2)), clamp(fogBlend, 0.0, 1.0));
 
     float perceptualSmoothness = 0.0;
     float reflectance = 0.0;

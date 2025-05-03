@@ -1,8 +1,21 @@
-#version 330 compatibility
+#version 460
 
-out vec2 texcoord;
+//attributes
+in vec3 vaPosition;
+in vec2 vaUV0;
+
+//uniforms
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+uniform vec3 chunkOffset;
+
+
+
+out vec2 lightMapCoords;
+out vec2 texCoord;
 
 void main() {
-	gl_Position = ftransform();
-	texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
+	texCoord = vaUV0;
+
+	gl_Position = projectionMatrix * modelViewMatrix * vec4(vaPosition+chunkOffset,1);
 }
