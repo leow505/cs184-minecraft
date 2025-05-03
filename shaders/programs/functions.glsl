@@ -57,7 +57,7 @@ vec3 brdf(vec3 lightDir, vec3 viewDir, float roughness, vec3 normal, vec3 albedo
 }
 
 
-vec3 lightingCalc(vec3 albedo, vec3 tangent, vec3 normalWorldSpace, vec3 worldGeoNormal, vec3 skyLight,vec3 fragFeetPlayerSpace,vec3 fragWorldSpace) {
+vec3 lightingCalc(vec3 albedo, vec3 tangent, vec3 normalWorldSpace, vec3 worldGeoNormal, vec3 skyLight,vec3 fragFeetPlayerSpace,vec3 fragWorldSpace, float frameTimeCounter) {
     //material data
     vec4 specularData = texture(specular,texCoord);
     float perceptualSmoothness = specularData.r;
@@ -126,6 +126,7 @@ vec3 lightingCalc(vec3 albedo, vec3 tangent, vec3 normalWorldSpace, vec3 worldGe
     if (renderStage == MC_RENDER_STAGE_PARTICLES) {
         outputColor = ambientLight + skyLight*albedo;
     }
+    
 
 
     return outputColor;

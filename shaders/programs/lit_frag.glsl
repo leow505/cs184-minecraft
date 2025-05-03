@@ -11,6 +11,8 @@ uniform sampler2D depthtex0;
 uniform sampler2D shadowtex0;
 uniform sampler2D shadowtex1;
 uniform sampler2D shadowcolor0;
+uniform sampler2D colortex0; // screen color buffer
+uniform float frameTimeCounter;
 
 uniform mat4 gbufferModelViewInverse;
 uniform mat4 modelViewMatrixInverse;
@@ -93,8 +95,7 @@ void main() {
     vec3 skyLight = pow(texture(lightmap,vec2(1.0/32.0,lightMapCoords.y)).rgb,vec3(2.2));
 
     //lighting
-    vec3 outputColor = lightingCalc(albedo, tangent.xyz, normalWorldSpace, w_geoNormal, skyLight, fragFeetPlayerSpace, fragWorldSpace);
-
+    vec3 outputColor = lightingCalc(albedo, tangent.xyz, normalWorldSpace, w_geoNormal, skyLight, fragFeetPlayerSpace, fragWorldSpace, frameTimeCounter);
     //dh blend
     float distanceFromCam = distance(viewSpacePosition, vec3(0));
     float dhBlend = smoothstep(far-0.5*far, far, distanceFromCam);
