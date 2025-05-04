@@ -201,6 +201,7 @@ void main() {
    
     vec3 outColor = inColor + mix(reflectionColor,vec3(0),pow(roughness,.1));
     
+    
     outColor = pow(outColor,vec3(1/2.2));
     outColor0 = vec4(outColor,transparency);
 }

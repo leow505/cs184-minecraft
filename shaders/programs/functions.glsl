@@ -7,7 +7,7 @@ mat3 tbnNormalTangent(vec3 normal, vec3 tangent) {
 
 
 vec3 brdf(vec3 lightDir, vec3 viewDir, float roughness, vec3 normal, vec3 albedo, float metallic, vec3 reflectance, bool diffuseOnly, bool reflectionPass) {
-    float alpha = pow(roughness, 2);
+    float alpha = roughness * roughness;
 
     vec3 H = normalize(lightDir + viewDir);
 
@@ -34,8 +34,9 @@ vec3 brdf(vec3 lightDir, vec3 viewDir, float roughness, vec3 normal, vec3 albedo
     float geom = (NdotL / (NdotL*(1-k)+k)) * (NdotV / ((NdotV*(1-k)+k)));
 
     //distribution of microfacets
-    float lowerTerm = pow(NdotH, 2) * (pow(alpha,2) - 1.0) + 1.0;
-    float ndfGGX = pow(alpha, 2) / (3.14159 * pow(lowerTerm, 2));
+    float alpha2 = alpha * alpha;
+    float lowerTerm = pow(NdotH, 2) * (alpha2 - 1.0) + 1.0;
+    float ndfGGX = alpha2 / (3.14159 * lowerTerm * lowerTerm);
 
     vec3 phongDiffuse = rhoD;
     vec3 cookTorrance = (fresnelReflectance*ndfGGX*geom)/(4.0 * NdotL * NdotV);
